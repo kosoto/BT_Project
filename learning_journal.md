@@ -3,7 +3,7 @@
 ## [Node.js 학습](https://www.opentutorials.org/course/3332)
 - Node.js 설치 (https://nodejs.org/ko/)
 - 설치 확인방법 : cmd에서 node -v
-- node로 js 파일 실행방법 : node fileName.js
+- node로 js 파일 실행방법 : cmd node fileName.js
 - Node.js로 간단한 웹서버 만들기
   - 터미널에서 node (아래파일을 저장한 js파일) 명령어를 입력하면 웹서버구동 e.g)node main.js 
   - 접속은 localhost:3000
