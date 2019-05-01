@@ -55,7 +55,7 @@ app.listen(3000);
 
 - 동적인 웹페이지 반환하기
   - 변수에 따라 변하는 html을 반환
-```
+```javascript
 ...상단 코드 생략
 var template = `
     <!doctype html>
@@ -72,13 +72,154 @@ var template = `
         <li><a href="/?id=JavaScript">JavaScript</a></li>
     </ol>
     <h2>${title}</h2>
-    <p>The World Wide Web (abbreviated WWW or the Web) is an information space where documents and other web resources are identified by Uniform Resource Locators (URLs), interlinked by hypertext links, and can be accessed via the Internet.[1] English scientist Tim Berners-Lee invented the World Wide Web in 1989. He wrote the first web browser computer program in 1990 while employed at CERN in Switzerland.[2][3] The Web browser was released outside of CERN in 1991, first to other research institutions starting in January 1991 and to the general public on the Internet in August 1991.
+    <p>
     </p>
     </body>
     </html>
     `;
     response.end(template); //html 코드를 반환
 ... 하단 코드 생략
+```
 
+# 5.1
 
+## [Node.js 학습](https://www.opentutorials.org/course/3332)
 
+- 파일을 읽고 파일 내용을 이용하여 렌더링하기
+
+```javascript
+/* 
+    데이터의 위치, encoding, callback
+    callback 의 두번째 인자에 파일의 내용이 있음
+ */
+fs.readFile(`data/${queryData.id}`,'utf-8',function(err,description){
+        console.log(description)
+        var template = `
+    <!doctype html>
+    <html>
+    <head>
+    <title>WEB1 - ${title}</title>
+    <meta charset="utf-8">
+    </head>
+    <body>
+    <h1><a href="/">WEB</a></h1>
+    <ol>
+        <li><a href="/?id=HTML">HTML</a></li>
+        <li><a href="/?id=CSS">CSS</a></li>
+        <li><a href="/?id=JavaScript">JavaScript</a></li>
+    </ol>
+    <h2>${title}</h2>
+    <p>${description}</p>
+    </body>
+    </html>
+    `;
+    response.end(template);
+    });
+```
+
+- 파일 목록 읽기
+
+```javascript
+var testFolder = './data'; //파일들이 위치한 디렉토리
+var fs = require('fs');
+ 
+fs.readdir(testFolder, function(error, filelist){
+  console.log(filelist);
+})
+
+```
+
+- PM2
+|작업|명령어|설명|
+|-|-|-|
+|설치|npm install pm2||
+|실행|pm2 start main.js||
+|watch|pm2 start main.js --watch|앱이 종료되면 자동으로 재실행, 수정사항 실시간 반영|
+|watch --ignore|pm2 start main.js --watch --ignore-watch="data/*"|특정 디렉토리의 수정을 무시|
+|로그|pm2 log|앱이 구동되는 동안의 로그 및 에러를 출력|
+|모니터|pm2 monit|현재 구동중인 앱들 보여줌|
+
+- Form 형식으로 전송된 데이터 받기
+
+```javascript
+const qs = require('querystring');
+
+const app =  http.createServer(function(request,response){
+    let body = '';
+    /* 한번에 너무 큰 데이터가 전송되었을때를 대비하여 데이터를 분할하여 받음 */
+    request.on('data',function(data){
+        body += data;
+    });
+    /* 모든 데이터를 전송받았을때 실행 */
+    request.on('end',function(){
+        /* 전송받은 데이터를 JSON으로 파싱 */
+        const post = qs.parse(body);        
+    });
+});
+```
+
+- 파일 생성하기
+
+```javascript
+const fs = require('fs');
+
+fs.writeFile(`디렉토리위치`, '파일내용', 'utf8', err=>{
+    
+});
+```
+
+- 파일 수정하기
+
+```javascript
+const fs = require('fs');
+/* 파일명 수정 */
+fs.rename('이전파일명','새파일명',err=>{
+    fs.writeFile(`디렉토리위치`, '파일내용', 'utf8', err=>{
+    
+    });
+});
+```
+
+- 파일 삭제하기
+
+```javascript
+const fs = require('fs');
+
+fs.unlink('파일위치',err=>{
+
+});
+```
+
+- redirect
+
+```javascript
+const app =  http.createServer(function(request,response){
+    responce.writeHead(302,{Location:`url`});
+    responce.end();
+})
+```
+
+- 모듈 사용법
+  - exprot
+```javascript
+var M = {
+    v:'v',
+    f:function(){
+        console.log(this.v);
+    }
+}
+
+module.exports = M; //in ES6+ : export M;
+```
+
+  - import
+```javascript
+var M = require('./part.js'); //in ES6+ : import M from './part.js';
+console.log(M)
+```
+
+- package 설정
+  - npm init : package.json파일 생성됨 (DI)
+
+- XSS를 방지하는 모듈 : sanitize-html
+  - 현재 프로젝트에 설치방법 : npm install -S sanitize-html
