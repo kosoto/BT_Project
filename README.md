@@ -7,9 +7,10 @@
 
 - Javascript
 - typescript
-- Node.js : 자바스크립트를 통한 서버구축
+- [Node.js](https://nodejs.org/ko/) : 자바스크립트를 통한 서버구축 
+- [Express.js](https://expressjs.com/ko/) : node.js 기반 웹 프레임워크 
 - GraphQL : REST API를 대체하는 데이터 요청방법
-- Vue.js
+- [Vue.js](https://vuejs.org/)
 - MongoDB
 
-## 
+
